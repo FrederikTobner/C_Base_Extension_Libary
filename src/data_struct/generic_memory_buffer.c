@@ -73,7 +73,7 @@ bool generic_memory_buffer_init(generic_memory_buffer_t * gmb, size_t init_size,
 bool generic_memory_buffer_resize(generic_memory_buffer_t * gmb, size_t new_size) 
 { 
     size_t alloc_size = MAX(new_size, MIN_ARRAY_SIZE); 
-    char *new_data = CHECKED_REALLOC(gmb->data, alloc_size, gmb->obj_size); 
+    char * new_data = CHECKED_REALLOC(gmb->data, alloc_size, gmb->obj_size); 
     if (!new_data) return false; 
     gmb->data = new_data; 
     gmb->size = alloc_size; 

@@ -4,68 +4,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "../hashing/fnv1a.h"
 
 /// Tombstone - marks the spot of a deleted entry
 #define TOMBSTONE (external_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
+
+#define MAX_KEY_LENGTH (1024)
 
 #define GROWTH_FACTOR (2)
 
 #define TABLE_GROWTH_TRIGGER_VALUE (0.75)
 
-// Calculates the hash based on a string
-static unsigned int calculateHash(char const * name, external_chaining_hashtable_t * table)
-{
-    int length = strlen(name);
-    unsigned int hashValue = 0;
-    for (int i = 0; i < length; i++)
-    {
-        hashValue += name[i];
-        hashValue *= name[i];
-    }
-    return hashValue % table->allocated;
-}
+#define TABLE_INIT_SIZE (8)
 
-static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table){
-    
-    external_chaining_hashtable_entry_t ** newEntries = malloc(table->allocated * sizeof(external_chaining_hashtable_entry_t *) * GROWTH_FACTOR);    
-    if(!newEntries)
-        return - 1;
-    for (size_t i = 0; i < table->allocated * GROWTH_FACTOR; i++)
-    {
-        newEntries[i] = NULL;
-    }
-    for (size_t j = 0; j < table->allocated; j++)
-    {
-        newEntries[j] = table->entries[j];
-    }
-    free(table->entries);
-    table->entries = newEntries;    
-    table->allocated *= GROWTH_FACTOR;
-    return 0;
+static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table);
+
+void external_chaining_hashtable_set_print_function(external_chaining_hashtable_t * table, void * printfunction)
+{
+    if(!table || !printfunction)
+        return;
+    table->printValue = printfunction;
 }
 
 void external_chaining_hashtable_print_table(external_chaining_hashtable_t * table)
 {
+    if(!table)
+        return;
     printf("start:\n");
     for (int i = 0; i < table->allocated; i++)
     {
         if (table->entries[i] == NULL)
-        {
-            printf("%i\t%s (%i)\n", i, "------", 0);
-        }
+            printf("%i\t%s\n", i, "------");
         else if (table->entries[i] == TOMBSTONE)
-        {
-            // Rest in piece brother
             printf("%i\t%s (%i)\n", i, "--RIP--", 0);
-        }
         else
         {
             printf("%i\t", i);
             external_chaining_hashtable_entry_t * currentNode = table->entries[i];
             while (currentNode != NULL)
             {
-                printf("%s(%i)--", currentNode->key, currentNode->value);
+                printf("%s", currentNode->key);
+                if(table->printValue)
+                {
+                    putc('(', stdout);
+                    table->printValue(currentNode->value);
+                    putc(')', stdout);
+                }
+                printf(" - ");
                 currentNode = (external_chaining_hashtable_entry_t *)currentNode->nextNode;
             }
             printf("\n");
@@ -76,72 +61,98 @@ void external_chaining_hashtable_print_table(external_chaining_hashtable_t * tab
 
 int external_chaining_hashtable_init_table(external_chaining_hashtable_t * table)
 {
+    if(!table)
+        return -1;
     table->used = 0;
     table->allocated = TABLE_INIT_SIZE;
     table->entries = malloc(table->allocated * sizeof(external_chaining_hashtable_entry_t *));
+    table->printValue = NULL;
     if(!table->entries)
         return -1;
     for (int i = 0; i < table->allocated; i++)
-    {
         table->entries[i] = NULL;
-    }
     return 0;
 }
 
 void external_chaining_hashtable_free_table(external_chaining_hashtable_t * table)
 {
+    if(!table)
+        return;
     free(table->entries);
 }
 
-bool external_chaining_hashtable_insert_entry(external_chaining_hashtable_entry_t * entry, external_chaining_hashtable_t * table)
+int external_chaining_hashtable_insert_entry(external_chaining_hashtable_entry_t * entry, external_chaining_hashtable_t * table)
 {
-    if (entry == NULL)
-        return false;
-    int index = calculateHash(entry->key, table);
-    entry->nextNode = (struct external_chaining_hashtable_entry_t *)table->entries[index];
-    table->entries[index] = entry;
-    if(entry->nextNode != NULL)
-        table->used++;
+    if (!entry || !table)
+        return -1;
     if(table->used > ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
         if(external_chaining_hashtable_grow_table(table))
-            return false;
-    return true;
+            return -1;
+    uint32_t index = hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
+    entry->nextNode = (struct external_chaining_hashtable_entry_t *)table->entries[index];
+    table->entries[index] = entry;
+    if(entry->nextNode)
+        table->used++;
+    return 0;
 }
 
 external_chaining_hashtable_entry_t * external_chaining_hashtable_remove_entry(external_chaining_hashtable_entry_t * entry, external_chaining_hashtable_t * table)
 {
-    int index = calculateHash(entry->key, table);
+    if(!table)
+        return NULL;
+    uint32_t index = hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
     external_chaining_hashtable_entry_t *tempEntry = table->entries[index];
     external_chaining_hashtable_entry_t *previousEntry = NULL;
-    while (tempEntry != NULL && strncmp(tempEntry->key, entry->key, MAX_NAME_LENGTH) != 0)
+    while (tempEntry != NULL && strncmp(tempEntry->key, entry->key, MAX_KEY_LENGTH))
     {
         previousEntry = tempEntry;
         tempEntry = (external_chaining_hashtable_entry_t *)tempEntry->nextNode;
     }
-    if (tempEntry == NULL)
-        //
+    if (!tempEntry)
         return NULL;
-    if (previousEntry == NULL)
-    {
-        // Deleting the head
+    if (!previousEntry)
         table->entries[index] = (external_chaining_hashtable_entry_t *)tempEntry->nextNode;
-    }
     else
-    {
-        // Deleting something in the middle or at the end
         previousEntry->nextNode = tempEntry->nextNode;
-    }
     table->used--;
     return tempEntry;
 }
 
 external_chaining_hashtable_entry_t * external_chaining_hashtable_lookup_entry(char * key, external_chaining_hashtable_t * table)
 {
-    int index = calculateHash(key, table);
+    if(!table)
+        return NULL;
+    uint32_t index = hash_data_32(key, strlen(key))  & (table->allocated - 1);
     external_chaining_hashtable_entry_t *tempNode = table->entries[index];
-    while (tempNode != NULL && strncmp(table->entries[index]->key, key, MAX_NAME_LENGTH) != 0)
-    {
+    while (strncmp(tempNode->key, key, MAX_KEY_LENGTH) && tempNode->nextNode)
         tempNode = (external_chaining_hashtable_entry_t *)tempNode->nextNode;
-    }
+    if(!tempNode->nextNode && !strncmp(tempNode->key, key, MAX_KEY_LENGTH))
+        return NULL;
     return tempNode;
+}
+
+static void insert_all_entries(external_chaining_hashtable_t * table, external_chaining_hashtable_entry_t * entry)
+{
+    if(entry->nextNode)
+        insert_all_entries(table, (external_chaining_hashtable_entry_t *)entry->nextNode);
+    entry->nextNode = NULL;
+    external_chaining_hashtable_insert_entry(entry, table);     
+}
+
+static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table)
+{    
+    external_chaining_hashtable_entry_t ** newEntries = malloc(table->allocated * sizeof(external_chaining_hashtable_entry_t *) * GROWTH_FACTOR);    
+    if(!newEntries)
+        return - 1;
+    for (size_t i = 0; i < table->allocated * GROWTH_FACTOR; i++)
+        newEntries[i] = NULL;
+    external_chaining_hashtable_entry_t ** oldEntries = table->entries;
+    table->entries = newEntries;
+    table->used = 0;
+    table->allocated *= GROWTH_FACTOR;
+    for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
+        if(oldEntries[j])
+            insert_all_entries(table, oldEntries[j]);
+    free(oldEntries);    
+    return 0;
 }

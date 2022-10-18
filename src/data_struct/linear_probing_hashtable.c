@@ -3,92 +3,114 @@
 #include <stdlib.h>
 #include <string.h>
 #include "linear_probing_hashtable.h"
-
+#include "../hashing/fnv1a.h"
 /// Tombstone
 #define TOMBSTONE (linear_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
-static unsigned int calculateHash(const char *name)
+#define MAX_KEY_LENGTH (1024)
+
+#define GROWTH_FACTOR (2)
+
+#define TABLE_GROWTH_TRIGGER_VALUE (0.75)
+
+#define TABLE_INIT_SIZE (8)
+
+static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * table);
+
+void linear_probing_hashtable_set_print_function(linear_probing_hashtable_t * table, void * printfunction)
 {
-    int length = strlen(name);
-    unsigned int hashValue = 0;
-    for (int i = 0; i < length; i++)
-    {
-        hashValue += name[i];
-        hashValue *= name[i];
-    }
-    return hashValue % TABLE_SIZE;
+    if(!table || !printfunction)
+        return;
+    table->printValue = printfunction;
 }
 
 void linear_probing_hashtable_print_table(linear_probing_hashtable_t * table)
 {
+    if(!table)
+        return;
     printf("start:\n");
-    for (int i = 0; i < TABLE_SIZE; i++)
+    for (uint32_t i = 0; i < table->allocated; i++)
     {
-        if (table->entries[i] == NULL)
-        {
+        if (!table->entries[i])
             printf("%i\t%s (%i)\n", i, "----", 0);
-        }
         else if (table->entries[i] == TOMBSTONE)
-        {
             printf("%i\t%s (%i)\n", i, "-RIP-", 0);
-        }
         else
         {
-            printf("%i\t%s (%i)\n", i, table->entries[i]->key, table->entries[i]->value);
+            printf("%i\t%s ", i, table->entries[i]->key);
+            if(table->printValue)
+            {
+                    putc('(', stdout);
+                    table->printValue(table->entries[i]->value);
+                    putc(')', stdout);
+            }
+            putc('\n', stdout);
         }
+            
     }
     printf("end:\n");
 }
 
-linear_probing_hashtable_t * linear_probing_hashtable_init_table()
+int linear_probing_hashtable_init_table(linear_probing_hashtable_t * table)
 {
-    linear_probing_hashtable_t * table = malloc(sizeof(linear_probing_hashtable_t));
-    table->count = 0;
-    for (int i = 0; i < TABLE_SIZE; i++)
+    if(!table)
+        return -1;
+    table->used = 0;
+    table->allocated = TABLE_INIT_SIZE;
+    table->entries = malloc(table->allocated * sizeof(linear_probing_hashtable_entry_t *));
+    table->printValue = NULL;
+    if(!table->entries)
+        return -1;
+    for (int i = 0; i < table->allocated; i++)
         table->entries[i] = NULL;
-    return table;
+    return 0;
 }
 
 void linear_probing_hashtable_free_table(linear_probing_hashtable_t * table)
 {
+    if(!table)
+        return;
     free(table);
 }
 
-bool linear_probing_hashtable_insert_entry(linear_probing_hashtable_entry_t * node, linear_probing_hashtable_t * table)
+int linear_probing_hashtable_insert_entry(linear_probing_hashtable_entry_t * node, linear_probing_hashtable_t * table)
 {
-    if (node == NULL)
-        return false;
-    int index = calculateHash(node->key);
-    for (int i = 0; i < TABLE_SIZE; i++)
+    if (!node || !table)
+        return -1;
+    if(table->used > ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
+        if(linear_probing_hashtable_grow_table(table))
+            return -1;
+    uint32_t index = hash_data_32(node->key, strlen(node->key));
+    for (int i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
-        int try = (i + index) % TABLE_SIZE;
-        if (table->entries[try] == NULL || table->entries[try] == TOMBSTONE)
+        uint32_t try = (i + index)  & (table->allocated - 1);
+        if (!table->entries[try] || table->entries[try] == TOMBSTONE)
         {
             table->entries[try] = node;
-            table->count++;
-            return true;
+            table->used++;
+            return 0;
         }
     }
-    return false;
+    return -1;
 }
 
 linear_probing_hashtable_entry_t * linear_probing_hashtable_remove_entry(linear_probing_hashtable_entry_t * node, linear_probing_hashtable_t * table)
 {
-    int index = calculateHash(node->key);
-    for (int i = 0; i < TABLE_SIZE; i++)
+    if(!table)
+        return NULL;
+    uint32_t index = hash_data_32(node->key, strlen(node->key));
+    for (uint32_t i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
-        int try = (i + index) % TABLE_SIZE;
-        if (table->entries[try] == NULL)
-        {
+        uint32_t try = (i + index)  & (table->allocated - 1);
+        if (!table->entries[try])
             return false;
-        }
-        if (strncmp(table->entries[index]->key, node->key, MAX_NAME_LENGTH) == 0)
+        if (!strncmp(table->entries[index]->key, node->key, MAX_KEY_LENGTH))
         {
             linear_probing_hashtable_entry_t *tempNode = table->entries[index];
             table->entries[index] = TOMBSTONE;
-            table->count--;
+            table->used--;
             return tempNode;
         }
     }
@@ -97,20 +119,34 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_remove_entry(linear_
 
 linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char const * key, linear_probing_hashtable_t * table)
 {
-    int index = calculateHash(key);
-    for (int i = 0; i < TABLE_SIZE; i++)
+    if(!table)
+        return NULL;
+    uint32_t index = hash_data_32(key, strlen(key));
+    for (uint32_t i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
-        int try = (i + index) % TABLE_SIZE;
-        if (table->entries[try] == NULL)
-        {
+        uint32_t try = (i + index) & (table->allocated - 1);
+        if (!table->entries[try])
             return false;
-        }
-        if (strncmp(table->entries[index]->key, key, MAX_NAME_LENGTH) == 0)
-        {
-            // Entry found
-            return table->entries[index];
-        }
+        if (!strncmp(table->entries[index]->key, key, MAX_KEY_LENGTH))            
+            return table->entries[index]; // Entry found
     }
     return NULL;
+}
+
+static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * table)
+{
+    linear_probing_hashtable_entry_t ** newEntries = malloc(table->allocated * sizeof(linear_probing_hashtable_entry_t *) * GROWTH_FACTOR);    
+    if(!newEntries)
+        return - 1;
+    for (size_t i = 0; i < table->allocated * GROWTH_FACTOR; i++)
+        newEntries[i] = NULL;
+    linear_probing_hashtable_entry_t ** oldEntries = table->entries;
+    table->entries = newEntries;
+    table->used = 0;
+    table->allocated *= GROWTH_FACTOR;
+    for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
+        linear_probing_hashtable_insert_entry(table->entries[j], table);
+    free(oldEntries);    
+    return 0;
 }
