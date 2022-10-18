@@ -4,18 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../hashing/fnv1a.h"
+#include "common_macros.h"
 
 /// Tombstone - marks the spot of a deleted entry
 #define TOMBSTONE (external_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
-
-#define MAX_KEY_LENGTH (1024)
-
-#define GROWTH_FACTOR (2)
-
-#define TABLE_GROWTH_TRIGGER_VALUE (0.75)
-
-#define TABLE_INIT_SIZE (8)
 
 static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table);
 

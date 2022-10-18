@@ -1,9 +1,15 @@
+#include "linear_probing_hashtable.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "linear_probing_hashtable.h"
+
+
 #include "../hashing/fnv1a.h"
+
+#include "common_macros.h"
+
 /// Tombstone
 #define TOMBSTONE (linear_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
@@ -124,7 +130,6 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char c
     uint32_t index = hash_data_32(key, strlen(key));
     for (uint32_t i = 0; i < table->allocated; i++)
     {
-        // When we reach the end of the hashTable we continue from the beginning
         uint32_t try = (i + index) & (table->allocated - 1);
         if (!table->entries[try])
             return false;

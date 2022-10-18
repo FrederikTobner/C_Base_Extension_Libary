@@ -2,6 +2,7 @@
 #define DATA_STRUCTURES_LINEAR_PROBING_HASHTABLE_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 // Type Definition of an Entry structure in a hashtable (linear probing)
 typedef struct
