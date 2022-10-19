@@ -13,9 +13,9 @@ enum {
     LOGLEVEL_NONE
 };
 
-const char * log_level_strings [] = { "CRIT", "WARN", "INFO", "DEBG", "NONE" };
+char const * log_level_strings [] = { "CRIT", "WARN", "INFO", "DEBG", "NONE" };
 
-extern const char* log_level_strings[];
+extern char const * log_level_strings[];
 
 #define log(level, fmt, ...) \
     do { if (level <= LOGLEVEL) fprintf(stdout, "[%s] - " fmt "\t(function: %s in file %s at line %d)\n", log_level_strings[level], __VA_ARGS__, __func__, __FILE__, __LINE__); } while (0)

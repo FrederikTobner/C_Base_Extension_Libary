@@ -21,7 +21,7 @@
 
 #define TABLE_INIT_SIZE (8)
 
-static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * table);
+static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t *);
 
 void linear_probing_hashtable_set_print_function(linear_probing_hashtable_t * table, void * printfunction)
 {
@@ -74,9 +74,11 @@ int linear_probing_hashtable_init_table(linear_probing_hashtable_t * table)
 
 void linear_probing_hashtable_free_table(linear_probing_hashtable_t * table)
 {
-    if(!table)
+    if(!table->entries)
         return;
-    free(table);
+    free(table->entries);
+    table->allocated = table->used = 0;
+    table->entries = NULL;
 }
 
 int linear_probing_hashtable_insert_entry(linear_probing_hashtable_entry_t * node, linear_probing_hashtable_t * table)
@@ -141,7 +143,7 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char c
 
 static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * table)
 {
-    linear_probing_hashtable_entry_t ** newEntries = malloc(table->allocated * sizeof(linear_probing_hashtable_entry_t *) * GROWTH_FACTOR);    
+    linear_probing_hashtable_entry_t ** newEntries = CHECKED_MALLOC_USING_TYPE(table->allocated *  GROWTH_FACTOR, *table->entries);       
     if(!newEntries)
         return - 1;
     for (size_t i = 0; i < table->allocated * GROWTH_FACTOR; i++)

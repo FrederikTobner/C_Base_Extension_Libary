@@ -10,13 +10,13 @@ size_t used;
 void ** data; 
 }pointer_array_t;
 
-bool pointer_array_init(pointer_array_t * pointerArray, size_t init_size, size_t init_used);
+int pointer_array_init(pointer_array_t * pointerArray);
 
 void pointer_array_dealloc(pointer_array_t * pointerArray);
 
-bool pointer_array_resize(pointer_array_t * pointerArray, size_t new_size);
+int pointer_array_resize(pointer_array_t * pointerArray, size_t new_size);
 
-bool pointer_array_append(pointer_array_t * pointerArray, void *val);
+int pointer_array_append(pointer_array_t * pointerArray, void *value);
 
 void * pointer_array_at(pointer_array_t * pointerArray, size_t index);
 

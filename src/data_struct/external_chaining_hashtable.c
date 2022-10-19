@@ -11,7 +11,8 @@
 /// Tombstone - marks the spot of a deleted entry
 #define TOMBSTONE (external_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
-static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table);
+static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * );
+static void insert_all_entries(external_chaining_hashtable_t * , external_chaining_hashtable_entry_t * );
 
 void external_chaining_hashtable_set_print_function(external_chaining_hashtable_t * table, void * printfunction)
 {
@@ -70,9 +71,11 @@ int external_chaining_hashtable_init_table(external_chaining_hashtable_t * table
 
 void external_chaining_hashtable_free_table(external_chaining_hashtable_t * table)
 {
-    if(!table)
+    if(!table->entries)
         return;
     free(table->entries);
+    table->allocated = table->used = 0;
+    table->entries = NULL;
 }
 
 int external_chaining_hashtable_insert_entry(external_chaining_hashtable_entry_t * entry, external_chaining_hashtable_t * table)
@@ -135,7 +138,7 @@ static void insert_all_entries(external_chaining_hashtable_t * table, external_c
 
 static int external_chaining_hashtable_grow_table(external_chaining_hashtable_t * table)
 {    
-    external_chaining_hashtable_entry_t ** newEntries = malloc(table->allocated * sizeof(external_chaining_hashtable_entry_t *) * GROWTH_FACTOR);    
+    external_chaining_hashtable_entry_t ** newEntries = CHECKED_MALLOC_USING_TYPE(table->allocated *  GROWTH_FACTOR, *table->entries);    
     if(!newEntries)
         return - 1;
     for (size_t i = 0; i < table->allocated * GROWTH_FACTOR; i++)

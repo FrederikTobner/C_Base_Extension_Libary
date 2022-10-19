@@ -1,11 +1,7 @@
 #ifndef DATA_STRUCTURES_CODE_GENERATION_H
 #define DATA_STRUCTURES_CODE_GENERATION_H
 
-#define MAX(a,b) \
-(((a)>(b)) ? (a) : (b))
-
-#define MIN(a,b) \
-(((a)<(b)) ? (a) : (b))
+#include "common_macros.h"
 
 #define GEN_DYNARRAY_TYPE(TYPE)                     \
 typedef struct                                      \

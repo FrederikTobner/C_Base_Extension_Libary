@@ -6,47 +6,45 @@
 
 #include "common_macros.h"
 
-bool pointer_array_init(pointer_array_t *pointerArray, size_t init_size, size_t init_used)
+int pointer_array_init(pointer_array_t *pointerArray)
 { 
-    assert(init_size >= init_used); 
-    init_size = MAX(init_size, MIN_ARRAY_SIZE); 
-    pointerArray->data = CHECKED_MALLOC_USING_TYPE(init_size, *pointerArray->data); 
-    pointerArray->size = (pointerArray->data) ? init_size : 0; 
-    pointerArray->used = (pointerArray->data) ? init_used : 0; 
-    return !!pointerArray->data; 
+    pointerArray->data = CHECKED_MALLOC_USING_TYPE(MIN_ARRAY_SIZE, *pointerArray->data); 
+    pointerArray->size = (pointerArray->data) ? MIN_ARRAY_SIZE : 0; 
+    pointerArray->used = 0; 
+    return !pointerArray->data; 
 }
 
 void pointer_array_dealloc(pointer_array_t * pointerArray)
 { 
-    free(pointerArray->data); 
-    pointerArray->data = 0; 
-    pointerArray->size = 
-    pointerArray->used = 0; 
+    free(pointerArray->data);
+    pointerArray->size = pointerArray->used = 0;
+    pointerArray->data = NULL; 
 }
 
-bool pointer_array_resize(pointer_array_t  * pointerArray, size_t new_size)
+int pointer_array_resize(pointer_array_t  * pointerArray, size_t new_size)
 { 
+    assert(new_size >= pointerArray->used);
     size_t alloc_size = MAX(new_size, MIN_ARRAY_SIZE); 
     void ** new_data = CHECKED_REALLOC_USING_TYPE(pointerArray->data, alloc_size, *pointerArray->data); 
     if (!new_data) 
-        return false; 
+        return -1; 
     pointerArray->data = new_data; 
     pointerArray->size = alloc_size; 
     pointerArray->used = MIN(pointerArray->used, new_size); 
-    return true; 
+    return 0; 
 }
 
-bool pointer_array_append(pointer_array_t * pointerArray, void *val) 
+int pointer_array_append(pointer_array_t * pointerArray, void *value) 
 { 
     if (pointerArray->used == pointerArray->size) 
     {
         if (AT_MAX_LENGTH_USING_TYPE(pointerArray->size, *pointerArray->data)) 
-            return false; 
+            return -1; 
         size_t new_size = CAPPED_DPL_SIZE_USING_TYPE(pointerArray->size, *pointerArray->data); 
-        int resize_success = pointer_array_resize(pointerArray, new_size); if (!resize_success) return false; 
+        if ( pointer_array_resize(pointerArray, new_size)) return -1; 
     } 
-    pointerArray->data[pointerArray->used++] = val; 
-    return true; 
+    pointerArray->data[pointerArray->used++] = value; 
+    return 0; 
 }
 
 void * pointer_array_at(pointer_array_t * pointerArray, size_t index)

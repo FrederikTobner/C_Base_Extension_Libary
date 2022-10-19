@@ -5,7 +5,9 @@
 #include <stdbool.h>
 typedef struct
 {
+    // Key of the entry 🔑
     char const * key;
+    // Pointer to the value stored in the entry
     void * value;
     struct external_chaining_hashtable_entry_t * nextNode;
 } external_chaining_hashtable_entry_t;
@@ -35,8 +37,7 @@ int external_chaining_hashtable_insert_entry(external_chaining_hashtable_entry_t
 // Removes an entry from the hashtable
 external_chaining_hashtable_entry_t * external_chaining_hashtable_remove_entry(external_chaining_hashtable_entry_t * entry, external_chaining_hashtable_t * table);
 
-/* Looks up a entry in the hashtable, based on a key
-WARNING: returns null if the entry couldn't be found*/
+// Looks up a entry in the hashtable, based on a key
 external_chaining_hashtable_entry_t * external_chaining_hashtable_lookup_entry(char *key, external_chaining_hashtable_t * table);
 
 #endif

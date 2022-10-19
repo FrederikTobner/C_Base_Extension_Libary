@@ -51,21 +51,23 @@ static void external_chaining_hashtable_example()
         external_chaining_hashtable_insert_entry(&entries[i], &table);
     external_chaining_hashtable_print_table(&table);
     printf("value at foo: %i", *(int*)external_chaining_hashtable_lookup_entry("foo\n", &table)->value);
+    external_chaining_hashtable_free_table(&table);
+    external_chaining_hashtable_free_table(&table);
 }
 
 static void pointer_array_example()
 {
     pointer_array_t pa;
-    if(!pointer_array_init(&pa, 10, 0))
+    if(pointer_array_init(&pa))
         return;
     int i = 10;
     char c = '!';
     double d = 1.1;
-    if(!pointer_array_append(&pa, &i))
+    if(pointer_array_append(&pa, &i))
         return;
-    if(!pointer_array_append(&pa, &c))
+    if(pointer_array_append(&pa, &c))
         return;
-    if(!pointer_array_append(&pa, &d))
+    if(pointer_array_append(&pa, &d))
         return;
     printf("%i\n", *((int * )pointer_array_at(&pa, 0)));
     printf("%c\n", *((char * )pointer_array_at(&pa, 1)));
@@ -76,7 +78,7 @@ static void pointer_array_example()
 static void generic_memory_buffer_example()
 {
     generic_memory_buffer_t buffer;
-    generic_memory_buffer_init(&buffer, 1, 0, sizeof(int));
+    generic_memory_buffer_init(&buffer, sizeof(int));
     int val_1 = 1;
     int val_2 = 2;
     int val_3 = 3;

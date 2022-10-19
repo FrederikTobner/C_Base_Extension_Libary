@@ -7,6 +7,7 @@
 // Type Definition of an Entry structure in a hashtable (linear probing)
 typedef struct
 {
+    // Key of the entry 🔑
     char const * key;
     void * value;
 } linear_probing_hashtable_entry_t;
