@@ -22,7 +22,7 @@ static void printInt(void * value)
 static void external_chaining_hashtable_example()
 {
     external_chaining_hashtable_t table;
-    int numbers[] = {10, 5, 6,  2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
+    int numbers[] = {10, 5, 6, 2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
     external_chaining_hashtable_entry_t entries [] =    {   
                                                             {.key = "foo", .value = (void*)&numbers[0]},
                                                             {.key = "bar", .value = (void*)&numbers[1]},
@@ -51,7 +51,6 @@ static void external_chaining_hashtable_example()
         external_chaining_hashtable_insert_entry(&entries[i], &table);
     external_chaining_hashtable_print_table(&table);
     printf("value at foo: %i", *(int*)external_chaining_hashtable_lookup_entry("foo\n", &table)->value);
-    external_chaining_hashtable_free_table(&table);
     external_chaining_hashtable_free_table(&table);
 }
 
