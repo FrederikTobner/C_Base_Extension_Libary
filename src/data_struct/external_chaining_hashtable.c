@@ -123,7 +123,7 @@ external_chaining_hashtable_entry_t * external_chaining_hashtable_lookup_entry(c
     external_chaining_hashtable_entry_t *tempNode = table->entries[index];
     while (strncmp(tempNode->key, key, MAX_KEY_LENGTH) && tempNode->nextNode)
         tempNode = (external_chaining_hashtable_entry_t *)tempNode->nextNode;
-    if(!tempNode->nextNode && !strncmp(tempNode->key, key, MAX_KEY_LENGTH))
+    if(strncmp(tempNode->key, key, MAX_KEY_LENGTH))
         return NULL;
     return tempNode;
 }

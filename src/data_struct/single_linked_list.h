@@ -16,7 +16,7 @@ single_link_t *prepend(single_link_t *list, void* value);
 
 single_link_t *append(single_link_t *list, void* val);
 
-single_link_t *make_list(int n, void* array[n]);
+single_link_t *make_list(int n, void** array);
 
 bool contains(single_link_t *list, void* value);
 

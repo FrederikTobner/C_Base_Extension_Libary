@@ -40,7 +40,7 @@ bool contains(single_link_t *singleLinkedList, void* value)
     return false;
 }
 
-single_link_t *make_list(int n, void* array[n])
+single_link_t *make_list(int n, void** array)
 {
     single_link_t *singleLinkedList = 0;
     for (int i = n - 1; i >= 0; i--)

@@ -39,4 +39,6 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_remove_entry(linear_
 // Looks up a entry in the hashtable, based on a key
 linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char const * key, linear_probing_hashtable_t * table);
 
+void linear_probing_hashtable_set_print_function(linear_probing_hashtable_t * table, void * printfunction);
+
 #endif
