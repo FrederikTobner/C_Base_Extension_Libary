@@ -18,6 +18,7 @@ FetchContent_Declare(
 
 set(TEST_SOURCES
 sha256.cc
+fnv1a.cc
 )
 
 # For Windows: Prevent overriding the parent project's compiler/linker settings

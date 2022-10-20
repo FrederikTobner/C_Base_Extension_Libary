@@ -88,7 +88,7 @@ int linear_probing_hashtable_insert_entry(linear_probing_hashtable_entry_t * nod
     if(table->used >= ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
         if(linear_probing_hashtable_grow_table(table))
             return -1;
-    uint32_t index = hash_data_32(node->key, strlen(node->key));
+    uint32_t index = fnv1a_hash_data_32(node->key, strlen(node->key));
     for (int i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
@@ -107,7 +107,7 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_remove_entry(linear_
 {
     if(!table)
         return NULL;
-    uint32_t index = hash_data_32(node->key, strlen(node->key));
+    uint32_t index = fnv1a_hash_data_32(node->key, strlen(node->key));
     for (uint32_t i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
@@ -129,7 +129,7 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char c
 {
     if(!table)
         return NULL;
-    uint32_t index = hash_data_32(key, strlen(key));
+    uint32_t index = fnv1a_hash_data_32(key, strlen(key));
     for (uint32_t i = 0; i < table->allocated; i++)
     {
         uint32_t try = (i + index) % table->allocated;

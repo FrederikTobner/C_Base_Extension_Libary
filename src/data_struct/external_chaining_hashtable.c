@@ -85,7 +85,7 @@ int external_chaining_hashtable_insert_entry(external_chaining_hashtable_entry_t
     if(table->used > ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
         if(external_chaining_hashtable_grow_table(table))
             return -1;
-    uint32_t index = hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
+    uint32_t index = fnv1a_hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
     entry->nextNode = (struct external_chaining_hashtable_entry_t *)table->entries[index];
     table->entries[index] = entry;
     if(entry->nextNode)
@@ -97,7 +97,7 @@ external_chaining_hashtable_entry_t * external_chaining_hashtable_remove_entry(e
 {
     if(!table)
         return NULL;
-    uint32_t index = hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
+    uint32_t index = fnv1a_hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
     external_chaining_hashtable_entry_t *tempEntry = table->entries[index];
     external_chaining_hashtable_entry_t *previousEntry = NULL;
     while (tempEntry != NULL && strncmp(tempEntry->key, entry->key, MAX_KEY_LENGTH))
@@ -119,7 +119,7 @@ external_chaining_hashtable_entry_t * external_chaining_hashtable_lookup_entry(c
 {
     if(!table)
         return NULL;
-    uint32_t index = hash_data_32(key, strlen(key))  & (table->allocated - 1);
+    uint32_t index = fnv1a_hash_data_32(key, strlen(key))  & (table->allocated - 1);
     external_chaining_hashtable_entry_t *tempNode = table->entries[index];
     while (strncmp(tempNode->key, key, MAX_KEY_LENGTH) && tempNode->nextNode)
         tempNode = (external_chaining_hashtable_entry_t *)tempNode->nextNode;

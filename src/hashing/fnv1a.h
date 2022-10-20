@@ -2,9 +2,12 @@
 #define HASHIING_FNV1A_H
 
 #include <stdint.h>
+#include <stddef.h>
 
-uint32_t hash_data_32(char const * key, uint32_t length);
+// Fowler-Noll-Vo hashing function https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
 
-uint64_t hash_data_64(char const * key, uint64_t length);
+uint32_t fnv1a_hash_data_32(char const * data, size_t length);
+
+uint64_t fnv1a_hash_data_64(char const * data, size_t length);
 
 #endif

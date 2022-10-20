@@ -25,5 +25,5 @@ void vector3D_multiply_with_scalar(vector3D_t * vector, float scalar)
 
 double vector3D_magnitude(vector3D_t vector)
 {
-    sqrt(((long double)vector.x * vector.x) * vector.y * vector.y * vector.z * vector.z);
+    return sqrt(((long double)vector.x * vector.x) * vector.y * vector.y * vector.z * vector.z);
 }

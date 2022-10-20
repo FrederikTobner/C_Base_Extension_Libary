@@ -6,23 +6,23 @@
 #define OFFSET_BASIS64 0xcbf29ce484222325 
 #define PRIME64 0x00000100000001B3
 
-uint32_t hash_data_32(char const * key, uint32_t length)
+uint32_t fnv1a_hash_data_32(char const * data, size_t length)
 {
     uint32_t hash = OFFSET_BASIS32;
-    for (uint32_t i = 0; i < length; i++)
+    for (size_t i = 0; i < length; i++)
     {
-        hash ^= (uint8_t)key[i];
+        hash ^= (uint8_t)data[i];
         hash *= PRIME32;
     }
     return hash;
 }
 
-uint64_t hash_data_64(char const * key, uint64_t length)
+uint64_t fnv1a_hash_data_64(char const * data, size_t length)
 {
     uint64_t hash = OFFSET_BASIS64;
-    for (uint64_t i = 0; i < length; i++)
+    for (size_t i = 0; i < length; i++)
     {
-        hash ^= (uint8_t)key[i];
+        hash ^= (uint8_t)data[i];
         hash *= PRIME64;
     }
     return hash;
