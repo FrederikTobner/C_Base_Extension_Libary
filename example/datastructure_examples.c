@@ -11,6 +11,7 @@ void printInt(void * value)
 
 void linear_probing_hashtable_example()
 {
+    printf("Linear probing hashtable\n");
     linear_probing_hashtable_t table;
     int numbers[] = {10, 5, 6, 2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
     linear_probing_hashtable_entry_t entries [] =  {   
@@ -46,6 +47,7 @@ void linear_probing_hashtable_example()
 
 void external_chaining_hashtable_example()
 {
+    printf("External chaining hashtable\n");
     external_chaining_hashtable_t table;
     int numbers[] = {10, 5, 6, 2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
     external_chaining_hashtable_entry_t entries [] =    {   
@@ -81,6 +83,7 @@ void external_chaining_hashtable_example()
 
 void pointer_array_example()
 {
+    printf("Pointer Array\n");
     pointer_array_t pa;
     if(pointer_array_init(&pa))
         return;
@@ -101,6 +104,7 @@ void pointer_array_example()
 
 void generic_memory_buffer_example()
 {
+    printf("Generic memory buffer\n");
     generic_memory_buffer_t buffer;
     generic_memory_buffer_init(&buffer, sizeof(int));
     int val_1 = 1;
@@ -112,15 +116,4 @@ void generic_memory_buffer_example()
     for (size_t i = 0; i < 3; i++)
         printf("%i\n", generic_memory_buffer_at_as(&buffer, i, int));
     generic_memory_buffer_dealloc(&buffer);
-}
-
-void pointer_tree_example()
-{
-    int numbers[] = {10, 5, 6, 2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
-    pointer_tree_node_t treeRoot = {.value = &numbers[0], .children = NULL};
-    pointer_tree_node_t firstChild = {.value = &numbers[1], .children = NULL};
-    pointer_tree_node_t secondChild = {.value = &numbers[2], .children = NULL};
-    pointer_tree_add_child(&treeRoot, &firstChild);
-    pointer_tree_add_child(&treeRoot, &secondChild);
-    pointer_tree_free(&treeRoot);
 }

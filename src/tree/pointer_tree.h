@@ -1,14 +1,13 @@
-#ifndef DATA_STRUCTURES_POINTER_TREE_H
-#define DATA_STRUCTURES_POINTER_TREE_H
+#ifndef TREE_POINTER_TREE_H
+#define TREE_POINTER_TREE_H
 
 #include <stddef.h>
+#include "../data_struct/pointer_array.h"
 
-typedef struct pointer_tree_node_t
+typedef struct
 {
 void * value;
-size_t usedCount;
-size_t allocatedCount;
-struct pointer_tree_node_t * children;
+pointer_array_t * children;
 }pointer_tree_node_t;
 
 int pointer_tree_add_child(pointer_tree_node_t * parent, pointer_tree_node_t * child);

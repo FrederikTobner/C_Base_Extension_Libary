@@ -4,12 +4,13 @@ data_struct/generic_memory_buffer.c
 data_struct/external_chaining_hashtable.c
 data_struct/linear_probing_hashtable.c
 data_struct/pointer_array.c
-data_struct/pointer_tree.c
 data_struct/single_linked_list.c
 hashing/fnv1a.c
 hashing/sha256.c
 linear_algebra/vector2D.c
 linear_algebra/vector3D.c
+tree/pointer_tree.c
+tree/trie.c
 )
 
 set(LIBARY_HEADERS
@@ -21,17 +22,19 @@ data_struct/generic_memory_buffer.h
 data_struct/pointer_array.h
 data_struct/external_chaining_hashtable.h
 data_struct/linear_probing_hashtable.h
-data_struct/pointer_tree.h
 data_struct/single_linked_list.h
 hashing/fnv1a.h
 hashing/sha256.h
 linear_algebra/vector2D.h
 linear_algebra/vector3D.h
+tree/pointer_tree.h
+tree/trie.h
 base_utils.h
 cstring.h
 data_struct.h
 hashing.h
 linear_algebra.h
+tree.h
 )
 
 add_library(${PROJECT_NAME} ${LIBARY_SOURCES} ${LIBARY_HEADERS})

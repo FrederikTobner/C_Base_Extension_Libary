@@ -1,10 +1,12 @@
 set(EXAMPLE_SOURCES
 datastructure_examples.c
 main.c
+tree_example.c
 )
 
 set(EXAMPLE_HEADERS
 datastructure_examples.h
+tree_example.h
 )
 
 add_executable(${PROJECT_NAME}Example ${EXAMPLE_HEADERS} ${EXAMPLE_SOURCES})
