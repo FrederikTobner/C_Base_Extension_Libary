@@ -1,4 +1,5 @@
 #include "datastructure_examples.h"
+#include "tree_example.h"
 
 int main(int argc, char const ** argv)
 {   

@@ -30,9 +30,9 @@ void trie_free(trie_node_t * node)
 }
 
 trie_node_t * trie_child_at(trie_node_t * node, size_t index)
-{
-    assert(node->children->used >= index);
+{    
     if(!node || !node->children)
         return NULL;
+    assert(node->children->used >= index);
     return pointer_array_at(node->children, index);
 }

@@ -18,7 +18,7 @@ bool cstring_utils_contains_character_restricted(char const * text, char charact
     return false;
 }
 
-void cstring_reverse(char *str)
+void cstring_reverse(char * str)
 {
 	size_t counter;
 	char tmp = 0;
@@ -33,7 +33,7 @@ void cstring_reverse(char *str)
 }
 
 
-void cstring_trim(char *str)
+void cstring_trim(char * str)
 {
 	while (str[0] == ' ')
 		cstring_utils_behead(str);

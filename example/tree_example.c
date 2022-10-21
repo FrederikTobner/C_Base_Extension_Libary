@@ -27,12 +27,20 @@ void pointer_tree_example()
 void trie_example()
 {
     printf("Trie\n");
-    trie_node_t root = {.character = 'M'};
-    trie_node_t firstChild = {.character = 'I'};
+    trie_node_t root = {.character = '#'};
+    trie_node_t firstChild = {.character = 'T'};
     trie_node_t secondChild = {.character = 'O'};
+    trie_node_t firstChildChild = {.character = 'R'};
+    trie_node_t firstChildChildChild = {.character = 'E'};
+    trie_node_t firstChildChildChildChild = {.character = 'E'};
     trie_add_child(&root, &firstChild);
     trie_add_child(&root, &secondChild);
+    trie_add_child(&firstChild, &firstChildChild);
+    trie_add_child(&firstChildChild, &firstChildChildChild);
+    trie_add_child(&firstChildChildChild, &firstChildChildChildChild);
     printf("%c\n", trie_child_at(&root, 0)->character);
-    printf("%c\n", trie_child_at(&root, 1)->character);
+    printf("%c\n", trie_child_at(trie_child_at(&root, 0), 0)->character);
+    printf("%c\n", trie_child_at(trie_child_at(trie_child_at(&root, 0), 0), 0)->character);
+    printf("%c\n", trie_child_at(trie_child_at(trie_child_at(trie_child_at(&root, 0), 0), 0), 0)->character);
     trie_free(&root);
 }
