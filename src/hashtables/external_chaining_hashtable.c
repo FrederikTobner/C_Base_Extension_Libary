@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "../hashing/fnv1a.h"
-#include "common_macros.h"
+#include "common.h"
 
 /// Tombstone - marks the spot of a deleted entry
 #define TOMBSTONE (external_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)

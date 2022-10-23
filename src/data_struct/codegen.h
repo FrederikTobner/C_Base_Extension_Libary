@@ -75,4 +75,16 @@ size_t new_size);                                   \
 bool TYPE##_da_append (TYPE##_dynarray *da,         \
 TYPE val);
 
+// Tree code generation
+#define GEN_TREE_TYPE(TYPE)                         \
+typedef struct                                      \
+{                                                   \
+TYPE * value;                                       \
+pointer_array_t * children;                         \
+}TYPE##_tree_node_t;                                \
+typedef struct                                      \
+{                                                   \
+TYPE##_tree_node_t * root;                          \
+}TYPE##_tree_t;                                     
+
 #endif

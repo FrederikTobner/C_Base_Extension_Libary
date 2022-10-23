@@ -48,14 +48,4 @@ malloc((n) * sizeof(type)) : 0)
 (((n) < MAX_ARRAY_LENGTH_USING_SIZE(obj_size) / 2) \
 ? (2 * (n)) : MAX_ARRAY_LENGTH_USING_SIZE(obj_size))
 
-// Table specific macros
-
-#define MAX_KEY_LENGTH (1024)
-
-#define GROWTH_FACTOR (2)
-
-#define TABLE_GROWTH_TRIGGER_VALUE (0.75)
-
-#define TABLE_INIT_SIZE (8)
-
 #endif

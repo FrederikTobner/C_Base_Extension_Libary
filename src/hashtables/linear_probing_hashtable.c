@@ -5,10 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "../hashing/fnv1a.h"
 
-#include "common_macros.h"
+#include "common.h"
 
 /// Tombstone
 #define TOMBSTONE (linear_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)

@@ -9,10 +9,23 @@ char character;
 pointer_array_t * children;
 }trie_node_t;
 
-int trie_add_child(trie_node_t * parent, trie_node_t * child);
+typedef struct
+{
+trie_node_t * root;
+}trie_t;
 
-void trie_free(trie_node_t * node);
+int trie_add_child_to_node_with_character(trie_node_t * parent, char const character);
 
-trie_node_t * trie_child_at(trie_node_t * node, size_t index);
+int trie_init_trie(trie_t * trie);
+
+int trie_add_word_to_trie(trie_t * trie, char const * word);
+
+int trie_add_child_to_node(trie_node_t * parent, trie_node_t * child);
+
+void trie_free_from_node(trie_node_t * node);
+
+trie_node_t * trie_get_child_of_node_by_index(trie_node_t * node, size_t index);
+
+trie_node_t * trie_get_child_of_node_by_character(trie_node_t * node, char const character);
 
 #endif

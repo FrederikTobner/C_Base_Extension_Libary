@@ -1,5 +1,7 @@
+#include "allocators_examples.h"
 #include "datastructure_examples.h"
-#include "tree_example.h"
+#include "hashtable_examples.h"
+#include "tree_examples.h"
 
 int main(int argc, char const ** argv)
 {   
@@ -9,5 +11,7 @@ int main(int argc, char const ** argv)
     pointer_array_example();
     pointer_tree_example();
     trie_example();
+    quadratic_probing_hashtable_example();
+    linear_allocator_example();
     return 0;   
 }
