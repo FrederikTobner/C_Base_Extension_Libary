@@ -1,8 +1,3 @@
-# deletes build folder to ensure there are no makefiles that make the build fail (multiple target patterns 😨)
-if( MSVC )
-execute_process(COMMAND ${CMAKE_COMMAND} "-E" "remove_directory" ${PROJECT_BINARY_DIR}/src)
-endif()
-
 #C++ 14 needed for Google Test Framework
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
