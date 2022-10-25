@@ -20,11 +20,17 @@ typedef struct
     void (*printValue) (void* value);
 } external_chaining_hashtable_t;
 
-// Creates a new hashtable
+// Initializes a new hashtable
 int external_chaining_hashtable_init_table(external_chaining_hashtable_t * table);
 
+// Creates and initializes a new hashtable
+external_chaining_hashtable_t * external_chaining_hashtable_new();
+
+// Frees the memory occupied by a hashtable (does not free the memory occupied by the entries)
+void external_chaining_hashtable_destory(external_chaining_hashtable_t ** table);
+
 // Frees the memory used by the hashtable
-void external_chaining_hashtable_free_table(external_chaining_hashtable_t * table);
+void external_chaining_hashtable_free_entries(external_chaining_hashtable_t * table);
 
 void external_chaining_hashtable_set_print_function(external_chaining_hashtable_t * table, void * printfunction);
 

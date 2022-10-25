@@ -1,5 +1,5 @@
-#ifndef MEMORY_LINEAR_ALLOCATOR_H
-#define MEMORY_LINEAR_ALLOCATOR_H
+#ifndef ALLOCATORS_LINEAR_ALLOCATOR_H
+#define ALLOCATORS_LINEAR_ALLOCATOR_H
 
 #include <stddef.h>
 #include <stdint.h>

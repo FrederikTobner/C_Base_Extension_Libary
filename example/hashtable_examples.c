@@ -41,8 +41,8 @@ void linear_probing_hashtable_example()
     for (size_t i = 0; i < 20; i++)
         linear_probing_hashtable_insert_entry(&entries[i], &table);   
     linear_probing_hashtable_print_table(&table);
-     printf("value at foo: %i\n", *(int*)linear_probing_hashtable_look_up_entry("foo", &table)->value);
-    linear_probing_hashtable_free_table(&table);   
+    printf("value at foo: %i\n", *(int*)linear_probing_hashtable_look_up_entry("foo", &table)->value);
+    linear_probing_hashtable_free_entries(&table);   
 }
 
 void external_chaining_hashtable_example()
@@ -78,7 +78,7 @@ void external_chaining_hashtable_example()
         external_chaining_hashtable_insert_entry(&entries[i], &table);
     external_chaining_hashtable_print_table(&table);
     printf("value at foo: %i\n", *(int*)external_chaining_hashtable_lookup_entry("foo", &table)->value);
-    external_chaining_hashtable_free_table(&table);
+    external_chaining_hashtable_free_entries(&table);
 }
 
 void quadratic_probing_hashtable_example()
@@ -114,5 +114,5 @@ void quadratic_probing_hashtable_example()
         quadratic_probing_hashtable_insert_entry(&entries[i], &table);   
     quadratic_probing_hashtable_print_table(&table);
     printf("value at foo: %i\n", *(int*)quadratic_probing_hashtable_look_up_entry("foo", &table)->value);
-    quadratic_probing_hashtable_free_table(&table);
+    quadratic_probing_hashtable_free_entries(&table);
 }

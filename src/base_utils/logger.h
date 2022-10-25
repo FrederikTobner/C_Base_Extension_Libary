@@ -1,36 +1,23 @@
 #ifndef BASE_UTILS_LOGGER_H
 #define BASE_UTILS_LOGGER_H
 
+#define C_RESET  "\x1B[0m" // White (Default)
+#define C_DEBUG  "\x1B[32m" // Green
+#define C_INFO  "\x1B[36m" // Light-Blue
+#define C_WARN  "\x1B[33m" // Yellow
+#define C_ERROR  "\x1B[31m" // Red
+
 #include <stdio.h>
+#include <stdarg.h>
 
-#define LOGLEVEL LOGLEVEL_DEBUG
+#define log_debug(M, ...) fprintf(stderr, "[%sDEBUG%s]\t - " M "\n", C_DEBUG, C_RESET, ##__VA_ARGS__)
+#define log_info(M, ...) fprintf(stderr, "[%sINFO%s]\t - " M "\n", C_INFO, C_RESET, ##__VA_ARGS__)
+#define log_warn(M, ...) fprintf(stderr, "[%sWARN%s]\t - " M "\n", C_WARN, C_RESET, ##__VA_ARGS__)
+#define log_err(M, ...) fprintf(stderr, "[%sERROR%s]\t - " M "\n", C_ERROR, C_RESET, ##__VA_ARGS__)
 
-enum {
-    LOGLEVEL_DEBUG,
-    LOGLEVEL_INFO,
-    LOGLEVEL_WARNING,
-    LOGLEVEL_CRITICAL
-};
-
-char const * log_level_strings [] = { "DEBUG", "INFO", "WARN", "CRITICAL" };
-
-extern char const * log_level_strings[];
-
-#define log_at(level, fmt, ...) \
-    do { if (level <= LOGLEVEL) fprintf(stdout, "[%s] - " fmt "\t(function: %s in file %s at line %d)\n", log_level_strings[level], __VA_ARGS__, __func__, __FILE__, __LINE__); } while (0)
-
-#define log(level, fmt, ...) \
-    do { if (level <= LOGLEVEL) fprintf(stdout, "[%s] - " fmt, log_level_strings[level], __VA_ARGS__); } while (0)
-
-#define LOG_CRITICAL(fmt, ...) log(LOGLEVEL_CRITICAL, fmt, __VA_ARGS__)
-#define LOG_WARNING(fmt, ...) log(LOGLEVEL_WARNING, fmt, __VA_ARGS__)
-#define LOG_INFO(fmt, ...) log(LOGLEVEL_INFO, fmt, __VA_ARGS__)
-#define LOG_DEBUG(fmt, ...) log(LOGLEVEL_DEBUG, fmt, __VA_ARGS__)
-
-#define LOG_AT_CRITICAL(fmt, ...) log_at(LOGLEVEL_CRITICAL, fmt, __VA_ARGS__)
-#define LOG_AT_WARNING(fmt, ...) log_at(LOGLEVEL_WARNING, fmt, __VA_ARGS__)
-#define LOG_AT_INFO(fmt, ...) log_at(LOGLEVEL_INFO, fmt, __VA_ARGS__)
-#define LOG_AT_DEBUG(fmt, ...) log_at(LOGLEVEL_DEBUG, fmt, __VA_ARGS__)
-
+#define log_debug_at(M, ...) fprintf(stderr, "[%sDEBUG%s]\t%s(%d)\ - " M "\n", C_DEBUG, C_RESET, __FILE__, __LINE__, ##__VA_ARGS__)
+#define log_info_at(M, ...) fprintf(stderr, "[%sINFO%s]\t%s(%d)\t - " M "\n", C_INFO, C_RESET, __FILE__, __LINE__, ##__VA_ARGS__)
+#define log_err_at(M, ...) fprintf(stderr, "[%sERROR%s]\t%s(%d)\t - " M "\n", C_ERROR, C_RESET, __FILE__, __LINE__, ##__VA_ARGS__)
+#define log_warn_at(M, ...) fprintf(stderr, "[%sWARN%s]\t%s(%d)\t - " M "\n", C_WARN,  C_RESET, __FILE__, __LINE__, ##__VA_ARGS__)
 
 #endif

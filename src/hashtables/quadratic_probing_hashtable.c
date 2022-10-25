@@ -29,6 +29,24 @@ void quadratic_probing_hashtable_set_print_function(quadratic_probing_hashtable_
     table->printValue = printfunction;
 }
 
+quadratic_probing_hashtable_t * quadratic_probing_hashtable_new()
+{
+    quadratic_probing_hashtable_t * table = malloc(sizeof(quadratic_probing_hashtable_t));
+    if(!table)
+        return NULL;
+    quadratic_probing_hashtable_init_table(table);
+    return table;
+}
+
+void quadratic_probing_hashtable_destory(quadratic_probing_hashtable_t ** table)
+{
+    if(!*table)
+        return;
+    quadratic_probing_hashtable_free_entries(*table);
+    free(*table);
+    *table = NULL;
+}
+
 void quadratic_probing_hashtable_print_table(quadratic_probing_hashtable_t * table)
 {
     if(!table)
@@ -71,7 +89,7 @@ int quadratic_probing_hashtable_init_table(quadratic_probing_hashtable_t * table
     return 0;
 }
 
-void quadratic_probing_hashtable_free_table(quadratic_probing_hashtable_t * table)
+void quadratic_probing_hashtable_free_entries(quadratic_probing_hashtable_t * table)
 {
     if(!table->entries)
         return;

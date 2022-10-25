@@ -21,6 +21,25 @@ void external_chaining_hashtable_set_print_function(external_chaining_hashtable_
     table->printValue = printfunction;
 }
 
+external_chaining_hashtable_t * external_chaining_hashtable_new()
+{
+    external_chaining_hashtable_t * table = malloc(sizeof(external_chaining_hashtable_t));
+    if(!table)
+        return NULL;
+    external_chaining_hashtable_init_table(table);
+    return table;
+}
+
+void external_chaining_hashtable_destory(external_chaining_hashtable_t ** table)
+{
+    if(!*table)
+        return;
+    external_chaining_hashtable_free_entries(*table);
+    free(*table);
+    *table = NULL;
+}
+
+
 void external_chaining_hashtable_print_table(external_chaining_hashtable_t * table)
 {
     if(!table)
@@ -69,7 +88,7 @@ int external_chaining_hashtable_init_table(external_chaining_hashtable_t * table
     return 0;
 }
 
-void external_chaining_hashtable_free_table(external_chaining_hashtable_t * table)
+void external_chaining_hashtable_free_entries(external_chaining_hashtable_t * table)
 {
     if(!table->entries)
         return;

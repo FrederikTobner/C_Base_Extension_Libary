@@ -21,11 +21,17 @@ typedef struct
     void (*printValue) (void* value);
 }  quadratic_probing_hashtable_t;
 
-// Creates a new hashtable
+// Initializes a new hashtable
 int quadratic_probing_hashtable_init_table(quadratic_probing_hashtable_t * table);
 
+// Creates and initializes a new hashtable
+quadratic_probing_hashtable_t * quadratic_probing_hashtable_new();
+
+// Frees the memory occupied by a hashtable (does not free the memory occupied by the entries)
+void quadratic_probing_hashtable_destory(quadratic_probing_hashtable_t ** table);
+
 // Frees the memory used by the hashtable
-void quadratic_probing_hashtable_free_table(quadratic_probing_hashtable_t * table);
+void quadratic_probing_hashtable_free_entries(quadratic_probing_hashtable_t * table);
 
 // Prints out the hashtable
 void quadratic_probing_hashtable_print_table(quadratic_probing_hashtable_t * table);

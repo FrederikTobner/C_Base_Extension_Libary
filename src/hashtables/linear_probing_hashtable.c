@@ -29,6 +29,24 @@ void linear_probing_hashtable_set_print_function(linear_probing_hashtable_t * ta
     table->printValue = printfunction;
 }
 
+linear_probing_hashtable_t * linear_probing_hashtable_new()
+{
+    linear_probing_hashtable_t * table = malloc(sizeof(linear_probing_hashtable_t));
+    if(!table)
+        return NULL;
+    linear_probing_hashtable_init_table(table);
+    return table;
+}
+
+void linear_probing_hashtable_destory(linear_probing_hashtable_t ** table)
+{
+    if(!*table)
+        return;
+    linear_probing_hashtable_free_entries(*table);
+    free(*table);
+    *table = NULL;
+}
+
 void linear_probing_hashtable_print_table(linear_probing_hashtable_t * table)
 {
     if(!table)
@@ -71,7 +89,7 @@ int linear_probing_hashtable_init_table(linear_probing_hashtable_t * table)
     return 0;
 }
 
-void linear_probing_hashtable_free_table(linear_probing_hashtable_t * table)
+void linear_probing_hashtable_free_entries(linear_probing_hashtable_t * table)
 {
     if(!table->entries)
         return;

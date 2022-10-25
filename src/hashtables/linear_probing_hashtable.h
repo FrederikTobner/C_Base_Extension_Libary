@@ -21,11 +21,17 @@ typedef struct
     void (*printValue) (void* value);
 } linear_probing_hashtable_t;
 
-// Creates a new hashtable
+// Initializes a new hashtable
 int linear_probing_hashtable_init_table(linear_probing_hashtable_t * table);
 
+// Creates and initializes a new hashtable
+linear_probing_hashtable_t * linear_probing_hashtable_new();
+
+// Frees the memory occupied by a hashtable (does not free the memory occupied by the entries)
+void linear_probing_hashtable_destory(linear_probing_hashtable_t ** table);
+
 // Frees the memory used by the hashtable
-void linear_probing_hashtable_free_table(linear_probing_hashtable_t * table);
+void linear_probing_hashtable_free_entries(linear_probing_hashtable_t * table);
 
 // Prints out the hashtable
 void linear_probing_hashtable_print_table(linear_probing_hashtable_t * table);
