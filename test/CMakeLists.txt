@@ -11,6 +11,7 @@ FetchContent_Declare(
   GIT_TAG release-1.12.1
 )
 
+
 set(TEST_SOURCES
 sha256.cc
 fnv1a.cc
