@@ -56,4 +56,5 @@ static int linear_allocator_resize(linear_allocator_t * allocator)
     if(!newBlock)
         return -1;
     allocator->memory = newBlock;
+    return 0;
 }
