@@ -7,14 +7,10 @@ on:
     branches: [ "master" ]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 workflow-dispatch:
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -28,8 +24,8 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target C_Base_Extension_Libary
       
-     -name: Analyze
-         run: |
+     - name: Analyze
+       run: |
         sudo apt-get install python3-pip
         pip3 install cpplint
-        cpplint --root=./C_Base_Extension_Libary --linelength=150 --recursive --exclude=external/* --exclude=build/* *
+        cpplint --root=./src --linelength=150 --recursive --exclude=external/* --exclude=build/* *
