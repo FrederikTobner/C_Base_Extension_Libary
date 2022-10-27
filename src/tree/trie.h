@@ -18,6 +18,10 @@ int trie_add_child_to_node_with_character(trie_node_t * parent, char const chara
 
 int trie_init_trie(trie_t * trie);
 
+trie_t * trie_new();
+
+void trie_destory(trie_t ** trie);
+
 int trie_add_word_to_trie(trie_t * trie, char const * word);
 
 int trie_add_child_to_node(trie_node_t * parent, trie_node_t * child);

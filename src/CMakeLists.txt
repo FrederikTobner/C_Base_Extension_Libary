@@ -44,4 +44,8 @@ linear_algebra.h
 tree.h
 )
 
+if( MSVC )  
+add_compile_definitions(MSVC_VER)
+endif()
+
 add_library(${PROJECT_NAME} ${LIBARY_SOURCES} ${LIBARY_HEADERS})

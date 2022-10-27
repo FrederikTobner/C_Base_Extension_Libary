@@ -13,21 +13,21 @@ void pointer_tree_example()
     pointer_tree_node_t secondChild = {.value = &numbers[2]};
     pointer_tree_node_t firstChildChild = {.value = &numbers[3]};
     pointer_tree_node_t secondChildChild = {.value = &numbers[4]};
-    pointer_tree_add_child(&treeRoot, &firstChild);
-    pointer_tree_add_child(&treeRoot, &secondChild);
-    pointer_tree_add_child(&firstChild, &firstChildChild);
-    pointer_tree_add_child(&secondChild, &secondChildChild);
-    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_child_at(&treeRoot, 0)->value));
-    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_child_at(&treeRoot, 1)->value));
-    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_child_at(&firstChild, 0)->value));
-    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_child_at(&secondChild, 0)->value));
-    pointer_tree_free(&treeRoot);
+    pointer_tree_node_add_child(&treeRoot, &firstChild);
+    pointer_tree_node_add_child(&treeRoot, &secondChild);
+    pointer_tree_node_add_child(&firstChild, &firstChildChild);
+    pointer_tree_node_add_child(&secondChild, &secondChildChild);
+    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_node_child_at(&treeRoot, 0)->value));
+    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_node_child_at(&treeRoot, 1)->value));
+    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_node_child_at(&firstChild, 0)->value));
+    printf("%i\n", *(int*)((pointer_tree_node_t *)pointer_tree_node_child_at(&secondChild, 0)->value));
+    pointer_tree_node_free(&treeRoot);
 }
 
 void trie_example()
 {
     printf("Trie\n");
-    trie_t trie = {};
+    trie_t trie = {.root = NULL};
     trie_init_trie(&trie);
     trie_add_word_to_trie(&trie, "Trie");
     trie_add_word_to_trie(&trie, "Test");

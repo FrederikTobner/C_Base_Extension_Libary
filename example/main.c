@@ -1,4 +1,5 @@
 #include "allocators_examples.h"
+#include "base_utils_examples.h"
 #include "datastructure_examples.h"
 #include "hashtable_examples.h"
 #include "tree_examples.h"
@@ -13,5 +14,6 @@ int main(int argc, char const ** argv)
     trie_example();
     quadratic_probing_hashtable_example();
     linear_allocator_example();
+    checkv_example();
     return 0;   
 }

@@ -15,10 +15,10 @@ typedef struct
 pointer_tree_node_t * root;
 }pointer_tree_t;
 
-int pointer_tree_add_child(pointer_tree_node_t * parent, pointer_tree_node_t * child);
+int pointer_tree_node_add_child(pointer_tree_node_t * parent, pointer_tree_node_t * child);
 
-void pointer_tree_free(pointer_tree_node_t * node);
+void pointer_tree_node_free(pointer_tree_node_t * node);
 
-pointer_tree_node_t * pointer_tree_child_at(pointer_tree_node_t * node, size_t index);
+pointer_tree_node_t * pointer_tree_node_child_at(pointer_tree_node_t * node, size_t index);
 
 #endif

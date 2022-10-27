@@ -21,6 +21,24 @@ int trie_init_trie(trie_t * trie)
     return 0;
 }
 
+trie_t * trie_new()
+{
+    trie_t * table = malloc(sizeof(trie_t));
+    if(!table)
+        return NULL;
+    trie_init_trie(table);
+    return table;
+}
+
+void trie_destory(trie_t ** trie)
+{
+    if(!*trie)
+        return;
+    trie_free_from_node((*trie)->root);
+    free(*trie);
+    *trie = NULL;
+}
+
 int trie_add_word_to_trie(trie_t * trie, char const * word)
 {
     trie_node_t * currentNode = trie->root;    
