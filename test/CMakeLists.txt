@@ -30,10 +30,6 @@ target_link_libraries(${TEST_PROJ_NAME} GTest::gtest_main ${PROJECT_NAME})
 # For shorter includes
 target_include_directories(${TEST_PROJ_NAME} PUBLIC "${PROJECT_SOURCE_DIR}/src")
 
-if(DEFINED ENV{GITHUB_ACTIONS} AND DEFINED ENV{GITHUB_WORKSPACE})
-add_test(${TEST_PROJ_NAME} ${TEST_PROJ_NAME})
-elseif()
-include(Googletest)
+include(googletest)
 # discovers test cases automatically
 gtest_discover_tests(${TEST_PROJ_NAME})
-endif()
