@@ -6,9 +6,9 @@ data_struct/pointer_array.c
 data_struct/single_linked_list.c
 hashing/fnv1a.c
 hashing/sha256.c
-hashtables/external_chaining_hashtable.c
 hashtables/linear_probing_hashtable.c
 hashtables/quadratic_probing_hashtable.c
+hashtables/seperate_chaining_hashtable.c
 linear_algebra/vector2D.c
 linear_algebra/vector3D.c
 tree/pointer_tree.c
@@ -28,9 +28,9 @@ data_struct/single_linked_list.h
 hashing/fnv1a.h
 hashing/sha256.h
 hashtables/common.h
-hashtables/external_chaining_hashtable.h
 hashtables/linear_probing_hashtable.h
 hashtables/quadratic_probing_hashtable.h
+hashtables/seperate_chaining_hashtable.h
 linear_algebra/vector2D.h
 linear_algebra/vector3D.h
 tree/pointer_tree.h

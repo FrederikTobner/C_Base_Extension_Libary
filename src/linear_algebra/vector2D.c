@@ -20,6 +20,13 @@ void vector2D_multiply_with_scalar(vector2D_t * vector, float scalar)
     vector->y *= scalar;
 }
 
+void vector2D_normalize(vector2D_t * vector)
+{
+    float magnitude = vector2D_magnitude(*vector);
+    vector->x /= magnitude;
+    vector->y /= magnitude;
+}
+
 double vector2D_magnitude(vector2D_t vector)
 {
     return sqrt(((long double)vector.x * vector.x) * vector.y * vector.y);

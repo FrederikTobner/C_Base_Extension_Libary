@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #ifndef MSVC_VER
-// Makro for error handling
+// Makro for error handling (not available using msvc)
 #define CHECK(X) ({int __val = (X); (__val ==-1 ?\
                     ({fprintf(stderr, "ERROR (" __FILE__ ":%d) --%s\n"\
                     , __LINE__,strerror(errno)); \

@@ -23,6 +23,14 @@ void vector3D_multiply_with_scalar(vector3D_t * vector, float scalar)
     vector->z *= scalar;
 }
 
+void vector3D_normalize(vector3D_t * vector)
+{
+    float magnitude = vector3D_magnitude(*vector);
+    vector->x /= magnitude;
+    vector->y /= magnitude;
+    vector->z /= magnitude;
+}
+
 double vector3D_magnitude(vector3D_t vector)
 {
     return sqrt(((long double)vector.x * vector.x) * vector.y * vector.y * vector.z * vector.z);

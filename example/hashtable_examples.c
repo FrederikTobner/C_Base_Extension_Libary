@@ -48,9 +48,9 @@ void linear_probing_hashtable_example()
 void external_chaining_hashtable_example()
 {
     printf("External chaining hashtable\n");
-    external_chaining_hashtable_t table;
+    seperate_chaining_hashtable_t table;
     int numbers[] = {10, 5, 6, 2, 3, 8, 7, 1, 11, 4, 74, 49, 23, 21, 34, 98, 12, 46, 54, 77};
-    external_chaining_hashtable_entry_t entries [] =    {   
+    seperate_chaining_hashtable_entry_t entries [] =    {   
                                                             {.key = "foo", .value = (void*)&numbers[0]},
                                                             {.key = "bar", .value = (void*)&numbers[1]},
                                                             {.key = "baz", .value = (void*)&numbers[2]},
