@@ -45,7 +45,7 @@ void linear_probing_hashtable_example()
     linear_probing_hashtable_free_entries(&table);   
 }
 
-void external_chaining_hashtable_example()
+void seperate_chaining_hashtable_example()
 {
     printf("External chaining hashtable\n");
     seperate_chaining_hashtable_t table;
@@ -72,13 +72,13 @@ void external_chaining_hashtable_example()
                                                             {.key = "vysaa", .value = (void*)&numbers[18]},
                                                             {.key = "sdada", .value = (void*)&numbers[19]},
                                                         };
-    external_chaining_hashtable_init_table(&table);
-    external_chaining_hashtable_set_print_function(&table, printInt);
+    seperate_chaining_hashtable_init_table(&table);
+    seperate_chaining_hashtable_set_print_function(&table, printInt);
     for (size_t i = 0; i < sizeof(entries) / sizeof(*entries); i++)
-        external_chaining_hashtable_insert_entry(&entries[i], &table);
-    external_chaining_hashtable_print_table(&table);
-    printf("value at foo: %i\n", *(int*)external_chaining_hashtable_lookup_entry("foo", &table)->value);
-    external_chaining_hashtable_free_entries(&table);
+        seperate_chaining_hashtable_insert_entry(&entries[i], &table);
+    seperate_chaining_hashtable_print_table(&table);
+    printf("value at foo: %i\n", *(int*)seperate_chaining_hashtable_lookup_entry("foo", &table)->value);
+    seperate_chaining_hashtable_free_entries(&table);
 }
 
 void quadratic_probing_hashtable_example()

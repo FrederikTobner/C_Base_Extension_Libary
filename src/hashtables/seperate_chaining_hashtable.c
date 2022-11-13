@@ -12,7 +12,7 @@
 #define TOMBSTONE (seperate_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
 static int seperate_chaining_hashtable_grow_table(seperate_chaining_hashtable_t * );
-static void insert_all_entries(seperate_chaining_hashtable_t * , seperate_chaining_hashtable_entry_t * );
+static void seperate_chaining_hashtable_insert_all_entries(seperate_chaining_hashtable_t * , seperate_chaining_hashtable_entry_t * );
 
 void seperate_chaining_hashtable_set_print_function(seperate_chaining_hashtable_t * table, void * printfunction)
 {
@@ -26,7 +26,7 @@ seperate_chaining_hashtable_t * seperate_chaining_hashtable_new()
     seperate_chaining_hashtable_t * table = malloc(sizeof(seperate_chaining_hashtable_t));
     if(!table)
         return NULL;
-    external_chaining_hashtable_init_table(table);
+    seperate_chaining_hashtable_init_table(table);
     return table;
 }
 
@@ -34,7 +34,7 @@ void seperate_chaining_hashtable_destory(seperate_chaining_hashtable_t ** table)
 {
     if(!*table)
         return;
-    external_chaining_hashtable_free_entries(*table);
+    seperate_chaining_hashtable_free_entries(*table);
     free(*table);
     *table = NULL;
 }
@@ -102,7 +102,7 @@ int seperate_chaining_hashtable_insert_entry(seperate_chaining_hashtable_entry_t
     if (!entry || !table)
         return -1;
     if(table->used > ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
-        if(external_chaining_hashtable_grow_table(table))
+        if(seperate_chaining_hashtable_grow_table(table))
             return -1;
     uint32_t index = fnv1a_hash_data_32(entry->key, strlen(entry->key))  & (table->allocated - 1);
     entry->nextNode = (struct seperate_chaining_hashtable_entry_t *)table->entries[index];
@@ -147,12 +147,12 @@ seperate_chaining_hashtable_entry_t * seperate_chaining_hashtable_lookup_entry(c
     return tempNode;
 }
 
-static void insert_all_entries(seperate_chaining_hashtable_t * table, seperate_chaining_hashtable_entry_t * entry)
+static void seperate_chaining_hashtable_insert_all_entries(seperate_chaining_hashtable_t * table, seperate_chaining_hashtable_entry_t * entry)
 {
     if(entry->nextNode)
-        insert_all_entries(table, (seperate_chaining_hashtable_entry_t *)entry->nextNode);
+        seperate_chaining_hashtable_insert_all_entries(table, (seperate_chaining_hashtable_entry_t *)entry->nextNode);
     entry->nextNode = NULL;
-    external_chaining_hashtable_insert_entry(entry, table);     
+    seperate_chaining_hashtable_insert_entry(entry, table);     
 }
 
 static int seperate_chaining_hashtable_grow_table(seperate_chaining_hashtable_t * table)
@@ -168,7 +168,7 @@ static int seperate_chaining_hashtable_grow_table(seperate_chaining_hashtable_t 
     table->allocated *= GROWTH_FACTOR;
     for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
         if(oldEntries[j])
-            insert_all_entries(table, oldEntries[j]);
+            seperate_chaining_hashtable_insert_all_entries(table, oldEntries[j]);
     free(oldEntries);    
     return 0;
 }
