@@ -8,7 +8,7 @@
 #include "../hashing/fnv1a.h"
 #include "common.h"
 
-/// Tombstone - marks the spot of a deleted entry
+/// Tombstone
 #define TOMBSTONE (seperate_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
 static int seperate_chaining_hashtable_grow_table(seperate_chaining_hashtable_t * );

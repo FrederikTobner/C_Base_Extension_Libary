@@ -4,7 +4,9 @@ cstring/cstring_utils.c
 data_struct/generic_memory_buffer.c
 data_struct/pointer_array.c
 data_struct/single_linked_list.c
+hashing/elf.c
 hashing/fnv1a.c
+hashing/jenkins.c
 hashing/sha256.c
 hashtables/linear_probing_hashtable.c
 hashtables/quadratic_probing_hashtable.c
@@ -25,7 +27,9 @@ data_struct/codegen.h
 data_struct/generic_memory_buffer.h
 data_struct/pointer_array.h
 data_struct/single_linked_list.h
+hashing/elf.h
 hashing/fnv1a.h
+hashing/jenkins.h
 hashing/sha256.h
 hashtables/common.h
 hashtables/linear_probing_hashtable.h

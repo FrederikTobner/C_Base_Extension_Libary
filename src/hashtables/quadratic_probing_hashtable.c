@@ -12,14 +12,6 @@
 /// Tombstone
 #define TOMBSTONE (quadratic_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
 
-#define MAX_KEY_LENGTH (1024)
-
-#define GROWTH_FACTOR (2)
-
-#define TABLE_GROWTH_TRIGGER_VALUE (0.75)
-
-#define TABLE_INIT_SIZE (8)
-
 static int quadratic_probing_hashtable_grow_table(quadratic_probing_hashtable_t *);
 
 void quadratic_probing_hashtable_set_print_function(quadratic_probing_hashtable_t * table, void * printfunction)

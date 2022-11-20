@@ -1,5 +1,5 @@
-#ifndef HASHIING_FNV1A_H
-#define HASHIING_FNV1A_H
+#ifndef HASHING_FNV1A_H_
+#define HASHING_FNV1A_H_
 
 #include <stdint.h>
 #include <stddef.h>

@@ -9,16 +9,8 @@
 
 #include "common.h"
 
-/// Tombstone
+/// Used to mark a bucket that has stored an entry that has been removed
 #define TOMBSTONE (linear_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
-
-#define MAX_KEY_LENGTH (1024)
-
-#define GROWTH_FACTOR (2)
-
-#define TABLE_GROWTH_TRIGGER_VALUE (0.75)
-
-#define TABLE_INIT_SIZE (8)
 
 static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t *);
 
@@ -105,11 +97,12 @@ int linear_probing_hashtable_insert_entry(linear_probing_hashtable_entry_t * nod
     if(table->used >= ((double)table->allocated) * TABLE_GROWTH_TRIGGER_VALUE)
         if(linear_probing_hashtable_grow_table(table))
             return -1;
-    uint32_t index = fnv1a_hash_data_32(node->key, strlen(node->key));
+    uint32_t index, try;
+    index = fnv1a_hash_data_32(node->key, strlen(node->key));
     for (int i = 0; i < table->allocated; i++)
     {
         // When we reach the end of the hashTable we continue from the beginning
-        uint32_t try = (i + index)  & (table->allocated - 1);
+        try = (i + index)  & (table->allocated - 1);
         if (!table->entries[try] || table->entries[try] == TOMBSTONE)
         {
             table->entries[try] = node;
@@ -158,6 +151,9 @@ linear_probing_hashtable_entry_t * linear_probing_hashtable_look_up_entry(char c
     return NULL;
 }
 
+/// @brief Grows the size of a linear probing hashtable
+/// @param table The table that is grown
+/// @return 0 if successfull, -1 if not
 static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * table)
 {
     linear_probing_hashtable_entry_t ** newEntries = CHECKED_MALLOC_USING_TYPE(table->allocated *  GROWTH_FACTOR, *table->entries);       
