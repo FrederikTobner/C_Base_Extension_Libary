@@ -8,6 +8,7 @@
 #include "../hashing/fnv1a.h"
 
 #include "common.h"
+#include "../core/memory.h"
 
 /// Used to mark a bucket that has stored an entry that has been removed
 #define TOMBSTONE (linear_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
@@ -23,7 +24,7 @@ void linear_probing_hashtable_set_print_function(linear_probing_hashtable_t * ta
 
 linear_probing_hashtable_t * linear_probing_hashtable_new()
 {
-    linear_probing_hashtable_t * table = malloc(sizeof(linear_probing_hashtable_t));
+    linear_probing_hashtable_t * table = new(linear_probing_hashtable_t);
     if(!table)
         return NULL;
     linear_probing_hashtable_init_table(table);
@@ -35,7 +36,7 @@ void linear_probing_hashtable_destory(linear_probing_hashtable_t ** table)
     if(!*table)
         return;
     linear_probing_hashtable_free_entries(*table);
-    free(*table);
+    delete(*table);
     *table = NULL;
 }
 
@@ -85,7 +86,7 @@ void linear_probing_hashtable_free_entries(linear_probing_hashtable_t * table)
 {
     if(!table->entries)
         return;
-    free(table->entries);
+    delete(table->entries);
     table->allocated = table->used = 0;
     table->entries = NULL;
 }
@@ -167,6 +168,6 @@ static int linear_probing_hashtable_grow_table(linear_probing_hashtable_t * tabl
     table->allocated *= GROWTH_FACTOR;
     for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
         linear_probing_hashtable_insert_entry(oldEntries[j], table);
-    free(oldEntries);    
+    delete(oldEntries);    
     return 0;
 }

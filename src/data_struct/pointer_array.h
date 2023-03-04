@@ -3,11 +3,12 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include "../core/var.h"
 
 typedef struct { 
 size_t size; 
 size_t used; 
-void ** data; 
+var * data; 
 }pointer_array_t;
 
 int pointer_array_init(pointer_array_t * pointerArray);

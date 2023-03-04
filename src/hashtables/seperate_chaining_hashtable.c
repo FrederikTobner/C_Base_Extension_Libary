@@ -7,6 +7,7 @@
 
 #include "../hashing/fnv1a.h"
 #include "common.h"
+#include "../core/memory.h"
 
 /// Tombstone
 #define TOMBSTONE (seperate_chaining_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
@@ -23,7 +24,7 @@ void seperate_chaining_hashtable_set_print_function(seperate_chaining_hashtable_
 
 seperate_chaining_hashtable_t * seperate_chaining_hashtable_new()
 {
-    seperate_chaining_hashtable_t * table = malloc(sizeof(seperate_chaining_hashtable_t));
+    seperate_chaining_hashtable_t * table = new(seperate_chaining_hashtable_t);
     if(!table)
         return NULL;
     seperate_chaining_hashtable_init_table(table);
@@ -35,7 +36,7 @@ void seperate_chaining_hashtable_destory(seperate_chaining_hashtable_t ** table)
     if(!*table)
         return;
     seperate_chaining_hashtable_free_entries(*table);
-    free(*table);
+    delete(*table);
     *table = NULL;
 }
 
@@ -92,7 +93,7 @@ void seperate_chaining_hashtable_free_entries(seperate_chaining_hashtable_t * ta
 {
     if(!table->entries)
         return;
-    free(table->entries);
+    delete(table->entries);
     table->allocated = table->used = 0;
     table->entries = NULL;
 }
@@ -169,6 +170,6 @@ static int seperate_chaining_hashtable_grow_table(seperate_chaining_hashtable_t 
     for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
         if(oldEntries[j])
             seperate_chaining_hashtable_insert_all_entries(table, oldEntries[j]);
-    free(oldEntries);    
+    delete(oldEntries);    
     return 0;
 }

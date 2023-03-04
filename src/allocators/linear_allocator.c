@@ -3,22 +3,23 @@
 #include <stdlib.h>
 
 #include "common.h"
+#include "../core/memory.h"
 
 #define ALLOCATOR_INIT_SIZE (1024u)
 
 #define ALLOCATOR_GROWTH_FACTOR (2u)
 
-static int linear_allocator_resize();
+static int linear_allocator_resize(linear_allocator_t *);
 
 linear_allocator_t * linear_allocator_new()
 {
-    linear_allocator_t * allocator = malloc(sizeof(linear_allocator_t));
+    linear_allocator_t * allocator = new(linear_allocator_t);
     if(!allocator)
         return NULL;
-    allocator->memory = malloc(sizeof(ALLOCATOR_INIT_SIZE));
+    allocator->memory = malloc(ALLOCATOR_INIT_SIZE);
     if(!allocator->memory)
     {
-        free(allocator);
+        delete(allocator);
         return NULL;
     }
     allocator->allocatedBytes = ALLOCATOR_INIT_SIZE;
@@ -45,8 +46,8 @@ void linear_allocator_destroy(linear_allocator_t ** allocator)
 {
     if(!*allocator)
         return;
-    free((*allocator)->memory);
-    free(*allocator);
+    delete((*allocator)->memory);
+    delete(*allocator);
     *allocator = NULL;
 }
 

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "common_macros.h"
+#include "../core/memory.h"
 
 int pointer_array_init(pointer_array_t *pointerArray)
 { 
@@ -20,7 +21,7 @@ void pointer_array_dealloc(pointer_array_t * pointerArray)
 { 
     if(!pointerArray)
         return;
-    free(pointerArray->data);
+    delete(pointerArray->data);
     pointerArray->size = pointerArray->used = 0;
     pointerArray->data = NULL; 
 }

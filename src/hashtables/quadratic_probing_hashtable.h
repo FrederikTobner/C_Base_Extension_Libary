@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "../core/var.h"
+
 /// Type Definition of an Entry structure in a hashtable (linear probing)
 typedef struct
 {
@@ -22,7 +24,7 @@ typedef struct
     /// Pointer to the entries
     quadratic_probing_hashtable_entry_t ** entries;
     /// Function pointer to a function that prints out the value stored in the hashtable
-    void (*printValue) (void* value);
+    void (*printValue) (var value);
 }  quadratic_probing_hashtable_t;
 
 /// @brief Initializes a new hashtable

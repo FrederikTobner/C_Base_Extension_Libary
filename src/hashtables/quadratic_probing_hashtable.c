@@ -8,6 +8,7 @@
 #include "../hashing/fnv1a.h"
 
 #include "common.h"
+#include "../core/memory.h"
 
 /// Tombstone
 #define TOMBSTONE (quadratic_probing_hashtable_entry_t *)(0xFFFFFFFFFFFFFFFFUL)
@@ -23,7 +24,7 @@ void quadratic_probing_hashtable_set_print_function(quadratic_probing_hashtable_
 
 quadratic_probing_hashtable_t * quadratic_probing_hashtable_new()
 {
-    quadratic_probing_hashtable_t * table = malloc(sizeof(quadratic_probing_hashtable_t));
+    quadratic_probing_hashtable_t * table =new(quadratic_probing_hashtable_t);
     if(!table)
         return NULL;
     quadratic_probing_hashtable_init_table(table);
@@ -35,7 +36,7 @@ void quadratic_probing_hashtable_destory(quadratic_probing_hashtable_t ** table)
     if(!*table)
         return;
     quadratic_probing_hashtable_free_entries(*table);
-    free(*table);
+    delete(*table);
     *table = NULL;
 }
 
@@ -85,7 +86,7 @@ void quadratic_probing_hashtable_free_entries(quadratic_probing_hashtable_t * ta
 {
     if(!table->entries)
         return;
-    free(table->entries);
+    delete(table->entries);
     table->allocated = table->used = 0;
     table->entries = NULL;
 }
@@ -163,6 +164,6 @@ static int quadratic_probing_hashtable_grow_table(quadratic_probing_hashtable_t 
     table->allocated *= GROWTH_FACTOR;
     for (size_t j = 0; j < table->allocated / GROWTH_FACTOR; j++)
         quadratic_probing_hashtable_insert_entry(oldEntries[j], table);
-    free(oldEntries);    
+    delete(oldEntries);    
     return 0;
 }

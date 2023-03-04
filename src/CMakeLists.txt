@@ -22,6 +22,8 @@ allocators/linear_allocator.h
 allocators/common.h
 base_utils/check.h
 base_utils/logger.h
+core/memory.h
+core/var.h
 cstring/cstring_utils.h
 data_struct/codegen.h
 data_struct/generic_memory_buffer.h

@@ -33,9 +33,9 @@ void generic_memory_buffer_example()
     int val_1 = 1;
     int val_2 = 2;
     int val_3 = 3;
-    generic_memory_buffer_append(&buffer, (void*)&val_1);
-    generic_memory_buffer_append(&buffer, (void*)&val_2);
-    generic_memory_buffer_append(&buffer, (void*)&val_3);
+    generic_memory_buffer_append(&buffer, (var)&val_1);
+    generic_memory_buffer_append(&buffer, (var)&val_2);
+    generic_memory_buffer_append(&buffer, (var)&val_3);
     for (size_t i = 0; i < 3; i++)
         printf("%i\n", generic_memory_buffer_at_as(&buffer, i, int));
     generic_memory_buffer_dealloc(&buffer);

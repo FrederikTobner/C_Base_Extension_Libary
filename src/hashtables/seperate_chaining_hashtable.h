@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+
+#include "../core/var.h"
 typedef struct
 {
     /// Key of the entry 🔑
@@ -22,7 +24,7 @@ typedef struct
     /// Pointer to the entries
     seperate_chaining_hashtable_entry_t ** entries;
     /// Function pointer to a function that prints out the value stored in the hashtable
-    void (*printValue) (void* value);
+    void (*printValue) (var value);
 } seperate_chaining_hashtable_t;
 
 /// @brief Initializes a new hashtable

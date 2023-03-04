@@ -3,16 +3,19 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "../core/memory.h"
+#include "../core/var.h"
+
 int trie_init_trie(trie_t * trie)
 {
     if(!trie)
         return -1;
     if(!trie->root)
     {
-        trie->root = malloc(sizeof(trie_node_t));
+        trie->root = new(trie_node_t);
         if(!trie->root)
             return -1;
-         trie->root->children = malloc(sizeof(pointer_array_t));
+         trie->root->children = new(pointer_array_t);
         if(!trie->root->children)
             return -1;
         if(pointer_array_init(trie->root->children))
@@ -23,7 +26,7 @@ int trie_init_trie(trie_t * trie)
 
 trie_t * trie_new()
 {
-    trie_t * table = malloc(sizeof(trie_t));
+    trie_t * table = new(trie_t);
     if(!table)
         return NULL;
     trie_init_trie(table);
@@ -35,7 +38,7 @@ void trie_destory(trie_t ** trie)
     if(!*trie)
         return;
     trie_free_from_node((*trie)->root);
-    free(*trie);
+    delete(*trie);
     *trie = NULL;
 }
 
@@ -55,19 +58,19 @@ int trie_add_child_to_node(trie_node_t * parent, trie_node_t * child)
         return -1;
     if(!parent->children)
     {
-        parent->children = malloc(sizeof(pointer_array_t));
+        parent->children = new(pointer_array_t);
         if(!parent->children)
             return -1;
         pointer_array_init(parent->children);
     }
-    return pointer_array_append(parent->children, (void*)child);
+    return pointer_array_append(parent->children, (var)child);
 }
 
 int trie_add_child_to_node_with_character(trie_node_t * parent, char const character)
 {
     if(!parent)
         return -1;
-    trie_node_t * child = malloc(sizeof(trie_node_t));
+    trie_node_t * child = new(trie_node_t);
     child->character = character;
     child->children = NULL;
     if(!child)

@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "common_macros.h"
+#include "../core/memory.h"
 
 int generic_memory_buffer_append(generic_memory_buffer_t * buffer, void *value) 
 { 
@@ -28,7 +29,7 @@ void generic_memory_buffer_dealloc(generic_memory_buffer_t * buffer)
 {
     if(!buffer)
         return;
-    free(buffer->data); 
+    delete(buffer->data); 
     buffer->data = 0; 
     buffer->size = buffer->used = 0; 
 }

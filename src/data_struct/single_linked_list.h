@@ -4,9 +4,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "../core/var.h"
+
 typedef struct single_link_t
 {
-    void * value;
+    var value;
     struct single_link_t * next;
 } single_link_t;
 

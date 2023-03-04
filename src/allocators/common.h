@@ -3,12 +3,11 @@
 
 #include <stddef.h>
 
-// Machine word size. Depending on the architecture
-typedef void* word_t;
+#include "../core/var.h"
 
 size_t determine_alignment(size_t n) 
 {
-    return (n + sizeof(word_t) - 1) & ~(sizeof(word_t) - 1);
+    return (n + sizeof(var) - 1) & ~(sizeof(var) - 1);
 }
 
 #endif

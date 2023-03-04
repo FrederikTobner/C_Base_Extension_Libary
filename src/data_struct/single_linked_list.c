@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../core/memory.h"
+
 single_link_t * new_single_link_t(void * value, single_link_t * next)
 {
-    single_link_t *single_link_t = malloc(sizeof *single_link_t);
+    single_link_t *single_link_t = new(single_link_t);
     if (!single_link_t)
         return 0;
     single_link_t->value = value;
@@ -24,7 +26,7 @@ void free_list(single_link_t *list)
     while (list)
     {
         single_link_t *next = list->next;
-        free(list);
+        delete(list);
         list = next;
     }
 }
@@ -94,7 +96,7 @@ single_link_t * delete_value(single_link_t * list, void * value)
     if (list->value == value) 
     {  
         single_link_t * next = list->next; 
-        free(list); 
+        delete(list); 
         return delete_value(next, value); 
     } 
     else 
